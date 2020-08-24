@@ -1,9 +1,9 @@
 import React, {Component, createRef} from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {MAIN_LAUNCH_URI} from '../../tools/constant';
-import Style from './style';
 import WebViewError from '../error/WebViewError';
+import Style from './style';
 
 class STNParkingWebView extends Component {
   constructor(props) {
@@ -40,29 +40,42 @@ class STNParkingWebView extends Component {
     this.setState({error: true});
   };
 
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.backHandler);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
+  }
+
+  backHandler = () => {
+    this.webViewRef.current.goBack();
+    return true;
+  };
+
   render() {
     return (
       <View style={{flex: 1}}>
-        <ScrollView
-          style={{flex: 1}}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-            />
-          }>
-          <View style={Style.container}>
-            <WebView
-              source={{uri: this.state.currentUri}}
-              ref={this.webViewRef}
-              onError={() => this._handleError()}
-            />
-          </View>
-        </ScrollView>
+        <WebView
+          source={{uri: this.state.currentUri}}
+          ref={this.webViewRef}
+          onError={() => this._handleError()}
+        />
         <WebViewError
           isVisible={this.state.error}
           dismiss={this.dismissError}
         />
+        <View style={Style.overlayView}>
+          <ScrollView
+            contentContainerStyle={{flexGrow: 1}}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+          />
+        </View>
       </View>
     );
   }
