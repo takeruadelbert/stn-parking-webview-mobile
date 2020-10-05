@@ -178,6 +178,10 @@ android {
             dimension "version"
             applicationIdSuffix ".dev"
         }
+        waledDev {
+            dimension "version"
+            applicationIdSuffix ".waledDev"
+        }
         uat {
             dimension "version"
             applicationIdSuffix ".uat"
@@ -189,6 +193,10 @@ android {
         prod {
             dimension "version"
             applicationIdSuffix ".prod"
+        }
+        waledProd {
+            dimension "version"
+            applicationIdSuffix ".waledProd"
         }
     }
 
