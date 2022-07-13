@@ -190,6 +190,10 @@ android {
             dimension "version"
             applicationIdSuffix ".prod"
         }
+        cibabatProd {
+            dimension "version"
+            applicationIdSuffix ".cibabatProd"
+        }
     }
 
     // applicationVariants are e.g. debug, release
